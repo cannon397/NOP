@@ -21,7 +21,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-web-services'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+//    jpa
+//    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'
+//    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 //	lombok
     compileOnly 'org.projectlombok:lombok:1.18.32'
     annotationProcessor 'org.projectlombok:lombok:1.18.32'
@@ -35,7 +38,18 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 //  lettuce
     implementation group: 'io.lettuce', name: 'lettuce-core', version: '6.3.2.RELEASE'
-
+//  json convert
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.3'
+// https://mvnrepository.com/artifact/ch.qos.logback/logback-core
+    implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.5.6'
+// https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.1.0-alpha1'
+    // https://mvnrepository.com/artifact/ch.qos.logback/logback-classic
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.5.6'
+// serialized for localDatetime
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.3'
+//    validation
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 tasks.named('test') {

@@ -3,6 +3,6 @@ spring:
     name: NOP
   profiles:
     active: redis
-
-
+server:
+  port: 80
 
