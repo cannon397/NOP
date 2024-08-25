@@ -1,8 +1,10 @@
 package com.cannon.nop.interfaces.config.exception;
 
 import lombok.Builder;
+import lombok.Data;
 
 
+@Data
 public class ErrorResponse {
     private String code;
     private String message;

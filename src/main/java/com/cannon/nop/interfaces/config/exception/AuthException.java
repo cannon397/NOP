@@ -1,10 +1,10 @@
 package com.cannon.nop.interfaces.config.exception;
 
-public class AuthException extends RuntimeException {
-    private String message;
+import org.springframework.http.HttpStatus;
 
-    public AuthException(String message) {
-        super(message);
-        this.message = message;
+public class AuthException extends ApiException {
+
+    public AuthException(String userMessage) {
+        super(userMessage, HttpStatus.UNAUTHORIZED);
     }
 }

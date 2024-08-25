@@ -12,10 +12,10 @@ if remainEventLimit and remainEventLimit > 0 then
         if isSaved == 1 then
             redis.call('HINCRBY', eventKey, 'joinLimit', -1)
             redis.call('RPUSH', key .. ':list',   dataMap)
-            return true
+            return '{"success":true,"message":""}'
         else
-            return false
+            return '{"success":false,"message":"이미 존재하는 아이디입니다."}'
         end
 else
-    return false
+    return '{"success":false,"message":"참여 가능인원이 없습니다."}'
 end

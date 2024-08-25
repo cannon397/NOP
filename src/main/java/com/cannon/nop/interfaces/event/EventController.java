@@ -20,7 +20,7 @@ import java.net.URI;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/nop/v1/organizers")
+@RequestMapping("/api/nop/v1/organizer")
 public class EventController {
 
 
@@ -38,7 +38,7 @@ public class EventController {
 
         URI location = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
-                .path("/api/nop/v1/events/{eventUrlUUID}")
+                .path("/api/nop/v1/event/{eventUrlUUID}")
                 .buildAndExpand(eventAuthDTO.getEventUrlUUID())
                 .toUri();
         return ResponseEntity.created(location).body(eventAuthDTO);

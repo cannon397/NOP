@@ -22,6 +22,7 @@ public class EventDTO
     private List<@NotBlank @NoSpecialCharacters @MaxLength String> formData;
     @NotBlank
     @MaxLength
+//    0이면 안된다는 로직 필요함
     private Integer joinLimit;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     @FutureOrNow

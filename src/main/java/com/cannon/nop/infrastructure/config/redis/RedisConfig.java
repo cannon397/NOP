@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisPassword;
@@ -15,6 +14,7 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisKeyValueAdapter;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
@@ -23,7 +23,6 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import org.springframework.scripting.ScriptSource;
 import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -65,9 +64,11 @@ public class RedisConfig {
         return template;
     }
     @Bean
-    public RedisScript<Boolean> script() {
-        Resource scriptSource = new ClassPathResource("luascript/insertEventJoin.lua");
-        return RedisScript.of(scriptSource, Boolean.class);
+    public RedisScript<Object> script() {
+        DefaultRedisScript<Object> redisScript = new DefaultRedisScript<>();
+        redisScript.setScriptSource(new ResourceScriptSource(new ClassPathResource("luascript/insertEventJoin.lua")));
+        redisScript.setResultType(Object.class);  // java.util.List를 사용하여 반환 타입 설정
+        return redisScript;
     }
 
     @Bean
