@@ -19,7 +19,7 @@ public class EventDTO
     @MaxLength
     @NotBlank
     private String primaryId;
-    private List<@NotBlank @NoSpecialCharacters @MaxLength String> formData;
+    private List<@NotBlank @NoSpecialCharacters @MaxLength EventQuestionFormDTO> formData;
     @NotBlank
     @MaxLength
 //    0이면 안된다는 로직 필요함

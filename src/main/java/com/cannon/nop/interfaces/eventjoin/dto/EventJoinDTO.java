@@ -4,9 +4,7 @@ package com.cannon.nop.interfaces.eventjoin.dto;
 import com.cannon.nop.interfaces.validator.MaxLength;
 import com.cannon.nop.interfaces.validator.NoSpecialCharacters;
 import com.cannon.nop.interfaces.validator.NotBlank;
-import com.cannon.nop.util.Util;
-
-import lombok.*;
+import lombok.Data;
 
 import java.util.List;
 
@@ -18,6 +16,6 @@ public class EventJoinDTO {
     @MaxLength
     @NotBlank
     private String primaryId;
-    private List<@NotBlank @NoSpecialCharacters @MaxLength String> formData;
+    private List<@NotBlank @NoSpecialCharacters @MaxLength AnswerFormDTO> formData;
 
 }

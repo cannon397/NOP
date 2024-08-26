@@ -7,12 +7,12 @@ import lombok.ToString;
 @Getter
 @ToString
 public class EventAnswerForm {
-    private String answerForm;
+    private String answer;
     public EventAnswerForm() {
 
     }
     @Builder
-    public EventAnswerForm(String answerForm) {
-        this.answerForm = answerForm;
+    public EventAnswerForm(String answer) {
+        this.answer = answer;
     }
 }

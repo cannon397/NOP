@@ -7,14 +7,14 @@ import org.mapstruct.Mapping;
 
 
 
-@Mapper(componentModel = "spring", uses = EventFormMapper.class)
+@Mapper(componentModel = "spring")
 public interface EventMapper {
 
 
     @Mapping(target = "eventUrlUUID", ignore = true)
-    @Mapping(source = "formData", target = "eventQuestionForms", qualifiedByName = "stringsToForms")
+    @Mapping(source = "formData", target = "eventQuestionForms")
     Event toModel(EventDTO eventDto);
 
-    @Mapping(source = "eventQuestionForms", target = "formData", qualifiedByName = "formsToStrings")
+    @Mapping(source = "eventQuestionForms", target = "formData")
     EventDTO toDto(Event event);
 }
