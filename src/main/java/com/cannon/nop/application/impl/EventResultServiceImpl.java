@@ -26,7 +26,6 @@ public class EventResultServiceImpl implements EventResultService {
         EventAuth eventAuth = eventAuthService.getEventAccessManagement(adminUrlUUID);
         eventAuth.isAdmin(adminKeyUUID);
         Event event = eventService.getEventQuestionForm(eventAuth.getEventUrlUUID());
-//        Event event = eventRepository.findById(eventAuth.getEventUrlUUID()).orElseThrow(IllegalArgumentException::new);
         List<EventJoin> eventJoins = eventJoinService.getJoinEvents(eventAuth.getEventUrlUUID());
 
         EventResult eventResult = EventResult.builder()

@@ -5,6 +5,8 @@ import com.cannon.nop.application.EventService;
 import com.cannon.nop.domain.event.model.Event;
 import com.cannon.nop.domain.eventjoin.EventJoinRepository;
 import com.cannon.nop.domain.eventjoin.model.EventJoin;
+import com.cannon.nop.interfaces.config.exception.ApiException;
+import com.cannon.nop.interfaces.config.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,7 @@ public class EventJoinServiceImpl implements EventJoinService {
     @Override
     public EventJoin joinEvent(EventJoin eventJoin){
         Event event = eventService.getEventQuestionForm(eventJoin.getEventJoinId().getEventUrlUUID());
-        if(event.getStartDate().isAfter(eventJoin.getDatetime())) throw new IllegalArgumentException("이벤트 참여시간이 아닙니다.");
+        if(event.getStartDate().isAfter(eventJoin.getDatetime())) throw new ApiException(ErrorCode.NOT_EVENT_JOIN_TIME);
         return eventJoinRepository.save(eventJoin);
     }
     @Override

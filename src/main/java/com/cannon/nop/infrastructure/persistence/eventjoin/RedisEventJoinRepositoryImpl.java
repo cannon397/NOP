@@ -2,8 +2,8 @@ package com.cannon.nop.infrastructure.persistence.eventjoin;
 
 import com.cannon.nop.domain.eventjoin.EventJoinRepository;
 import com.cannon.nop.domain.eventjoin.model.EventJoin;
-import com.cannon.nop.interfaces.config.exception.ConflictException;
-import com.cannon.nop.interfaces.config.exception.InternalServerException;
+import com.cannon.nop.interfaces.config.exception.ApiException;
+import com.cannon.nop.interfaces.config.exception.ErrorCode;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,10 +69,11 @@ public class RedisEventJoinRepositoryImpl implements EventJoinRepository {
             Boolean isSuccess = (Boolean) resultMap.get("success");
             String message = (String) resultMap.get("message");
             if (!Boolean.TRUE.equals(isSuccess)) {
-                throw new ConflictException(message);
+                ErrorCode errorCode = ErrorCode.fromCode(message);
+                throw new ApiException(errorCode);
             }
         } else {
-            throw new InternalServerException("Unexpected result type from Lua script.");
+            throw new ApiException(ErrorCode.INTERNAL_ERROR,"Unexpected result type from Lua script.");
         }
     }
 
@@ -90,7 +91,7 @@ public class RedisEventJoinRepositoryImpl implements EventJoinRepository {
                 EventJoin eventJoinObj = objectMapper.readValue(jsonStr, EventJoin.class);
                 eventJoins.add(eventJoinObj);
             } catch (JsonProcessingException e) {
-                throw new InternalServerException(e.getMessage());
+                throw new ApiException(ErrorCode.INTERNAL_ERROR,e.getMessage());
             }
         }
 

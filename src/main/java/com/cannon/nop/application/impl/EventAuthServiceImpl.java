@@ -4,6 +4,8 @@ import com.cannon.nop.application.EventAuthService;
 import com.cannon.nop.domain.event.model.Event;
 import com.cannon.nop.domain.eventauth.EventAuthRepository;
 import com.cannon.nop.domain.eventauth.model.EventAuth;
+import com.cannon.nop.interfaces.config.exception.ApiException;
+import com.cannon.nop.interfaces.config.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,6 @@ public class EventAuthServiceImpl implements EventAuthService {
 
     public EventAuth getEventAccessManagement(String adminUrlUUID) {
         return eventAuthRepository.findById(adminUrlUUID)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(() -> new ApiException(ErrorCode.USER_NOT_FOUND));
     }
 }

@@ -17,11 +17,11 @@ public class GlobalExceptionHandler {
         log.error("ApiException: {}", ex.getMessage());
 
         ErrorResponse errorResponse = ErrorResponse.builder()
-                .code(String.valueOf(ex.getStatus().value()))
+                .code(ex.getErrorCode())
                 .message(ex.getUserMessage())  // 사용자에게 노출할 메시지 사용
                 .build();
 
-        return ResponseEntity.status(ex.getStatus()).body(errorResponse);
+        return ResponseEntity.status(ex.getHttpStatus()).body(errorResponse);
     }
 
     @ExceptionHandler(value = IllegalArgumentException.class)
@@ -44,16 +44,6 @@ public class GlobalExceptionHandler {
                 .build();
         log.error("NullPointerException", ex);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-    }
-//  예상되는 서버 예외
-    @ExceptionHandler(value = InternalServerException.class)
-    public ResponseEntity<ErrorResponse> handleInternalServerException(InternalServerException ex) {
-        log.error("InternalServerException: {}", ex.getMessage());
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .code("500")
-                .message("invalid error")
-                .build();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex) {

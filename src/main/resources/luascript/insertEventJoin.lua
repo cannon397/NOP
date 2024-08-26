@@ -14,8 +14,8 @@ if remainEventLimit and remainEventLimit > 0 then
             redis.call('RPUSH', key .. ':list',   dataMap)
             return '{"success":true,"message":""}'
         else
-            return '{"success":false,"message":"이미 존재하는 아이디입니다."}'
+            return '{"success":false,"message":"4092"}'
         end
 else
-    return '{"success":false,"message":"참여 가능 인원이 없습니다."}'
+    return '{"success":false,"message":"4093"}'
 end

@@ -5,15 +5,14 @@ import com.cannon.nop.application.EventService;
 import com.cannon.nop.domain.event.EventRepository;
 import com.cannon.nop.domain.event.model.Event;
 import com.cannon.nop.domain.eventauth.model.EventAuth;
+import com.cannon.nop.interfaces.config.exception.ApiException;
+import com.cannon.nop.interfaces.config.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 public class EventServiceImpl implements EventService {
-    private static final Logger log = LoggerFactory.getLogger(EventServiceImpl.class);
     private final EventRepository eventRepository;
     private final EventAuthService eventAuthService;
 
@@ -29,6 +28,6 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event getEventQuestionForm(String eventUrlUUID) {
-        return eventRepository.findById(eventUrlUUID).orElseThrow(IllegalArgumentException::new);
+        return eventRepository.findById(eventUrlUUID).orElseThrow(()->new ApiException(ErrorCode.NOT_FOUNT_RESOURCE));
     }
 }

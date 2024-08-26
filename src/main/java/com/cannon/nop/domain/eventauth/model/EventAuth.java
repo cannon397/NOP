@@ -1,7 +1,8 @@
 package com.cannon.nop.domain.eventauth.model;
 
 
-import com.cannon.nop.interfaces.config.exception.AuthException;
+import com.cannon.nop.interfaces.config.exception.ApiException;
+import com.cannon.nop.interfaces.config.exception.ErrorCode;
 import com.cannon.nop.util.Util;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,7 +42,7 @@ public class EventAuth implements Serializable {
 
     public void isAdmin(String adminKeyUUID){
         if(!this.adminKeyUUID.equals(adminKeyUUID)){
-            throw new AuthException("관리자 KEY가 일치하지 않습니다.");
+            throw new ApiException(ErrorCode.INTERNAL_ERROR);
         }
     }
 }
