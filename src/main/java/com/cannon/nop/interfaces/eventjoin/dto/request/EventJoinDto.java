@@ -1,4 +1,4 @@
-package com.cannon.nop.interfaces.eventjoin.dto;
+package com.cannon.nop.interfaces.eventjoin.dto.request;
 
 
 import com.cannon.nop.interfaces.validator.MaxLength;
@@ -10,12 +10,12 @@ import java.util.List;
 
 
 @Data
-public class EventJoinDTO {
+public class EventJoinDto {
     private String eventUrlUUID;
     @NoSpecialCharacters
     @MaxLength
     @NotBlank
     private String primaryId;
-    private List<@NotBlank @NoSpecialCharacters @MaxLength AnswerFormDTO> formData;
+    private List<@NotBlank @NoSpecialCharacters @MaxLength EventAnswerFormDto> formData;
 
 }

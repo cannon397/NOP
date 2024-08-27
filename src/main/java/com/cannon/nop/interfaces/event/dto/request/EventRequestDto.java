@@ -1,4 +1,4 @@
-package com.cannon.nop.interfaces.event.dto;
+package com.cannon.nop.interfaces.event.dto.request;
 
 import com.cannon.nop.interfaces.validator.FutureOrNow;
 import com.cannon.nop.interfaces.validator.MaxLength;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class EventDTO
+public class EventRequestDto
 {
 
 
@@ -19,7 +19,7 @@ public class EventDTO
     @MaxLength
     @NotBlank
     private String primaryId;
-    private List<@NotBlank @NoSpecialCharacters @MaxLength EventQuestionFormDTO> formData;
+    private List<@NotBlank @NoSpecialCharacters @MaxLength EventQuestionFormDto> formData;
     @NotBlank
     @MaxLength
 //    0이면 안된다는 로직 필요함

@@ -5,9 +5,9 @@ import com.cannon.nop.application.EventJoinService;
 import com.cannon.nop.application.EventService;
 import com.cannon.nop.domain.event.model.Event;
 import com.cannon.nop.interfaces.config.ApiResponse;
-import com.cannon.nop.interfaces.event.dto.EventDTO;
+import com.cannon.nop.interfaces.event.dto.response.EventResponseDto;
 import com.cannon.nop.interfaces.event.mapstruct.EventMapper;
-import com.cannon.nop.interfaces.eventjoin.dto.EventJoinDTO;
+import com.cannon.nop.interfaces.eventjoin.dto.request.EventJoinDto;
 import com.cannon.nop.interfaces.eventjoin.mapstruct.EventJoinMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,13 +24,13 @@ public class EventJoinController {
     private final EventJoinMapper eventJoinMapper;
 
     @GetMapping("{eventUrlUUID}")
-    public ResponseEntity<EventDTO> getEventInformation(@PathVariable String eventUrlUUID) {
+    public ResponseEntity<EventResponseDto> getEventInformation(@PathVariable String eventUrlUUID) {
         Event event = eventService.getEventQuestionForm(eventUrlUUID);
-        EventDTO responseDTO = eventMapper.toDto(event);
-        return ResponseEntity.ok(responseDTO);
+        EventResponseDto eventResponseDto = eventMapper.toDto(event);
+        return ResponseEntity.ok(eventResponseDto);
     }
     @PostMapping("{eventUrlUUID}/join")
-    public ResponseEntity<ApiResponse> joinEvent(@PathVariable String eventUrlUUID, @RequestBody EventJoinDTO eventJoinDTO){
+    public ResponseEntity<ApiResponse> joinEvent(@PathVariable String eventUrlUUID, @RequestBody EventJoinDto eventJoinDTO){
         eventJoinDTO.setEventUrlUUID(eventUrlUUID);
         eventJoinService.joinEvent(eventJoinMapper.toEntity(eventJoinDTO));
         return ResponseEntity.ok(new ApiResponse(true,"이벤트 참여에 성공했습니다."));

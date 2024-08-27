@@ -14,6 +14,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = ApiException.class)
     public ResponseEntity<ErrorResponse> handleApiException(ApiException ex) {
         // 내부 메시지 로깅
+        log.error("getDeveloperMessage: {}",ex.getDeveloperMessage());
         log.error("ApiException: {}", ex.getMessage());
 
         ErrorResponse errorResponse = ErrorResponse.builder()
@@ -23,35 +24,15 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity.status(ex.getHttpStatus()).body(errorResponse);
     }
-
-    @ExceptionHandler(value = IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleArgumentException(IllegalArgumentException ex) {
-        log.error("IllegalArgumentException: {}", ex.getMessage());
-
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .code("400")
-                .message(ex.getMessage())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-    }
-
-    @ExceptionHandler(value = NullPointerException.class)
-    public ResponseEntity<ErrorResponse> handleNullPointerException(NullPointerException ex) {
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .code("400")
-                .message(ex.getMessage())
-                .build();
-        log.error("NullPointerException", ex);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-    }
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex) {
+
+        log.error("UnCheckedException: ", ex);
+
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .code("500")
                 .message("invalid error")
                 .build();
-        log.error("UnCheckedException: ", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }
 }

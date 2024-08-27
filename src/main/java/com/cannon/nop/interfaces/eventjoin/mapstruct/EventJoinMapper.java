@@ -2,7 +2,7 @@ package com.cannon.nop.interfaces.eventjoin.mapstruct;
 
 import com.cannon.nop.domain.eventjoin.model.EventJoin;
 import com.cannon.nop.domain.eventjoin.model.EventJoinId;
-import com.cannon.nop.interfaces.eventjoin.dto.EventJoinDTO;
+import com.cannon.nop.interfaces.eventjoin.dto.request.EventJoinDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -11,11 +11,11 @@ import org.mapstruct.Named;
 public interface EventJoinMapper {
 
     @Mapping(source = "eventJoinDTO", target = "eventJoinId", qualifiedByName = "dtoToEventJoinId")
-    @Mapping(source = "formData", target = "formDatas")
-    EventJoin toEntity(EventJoinDTO eventJoinDTO);
+    @Mapping(source = "formData", target = "formData")
+    EventJoin toEntity(EventJoinDto eventJoinDTO);
 
     @Named("dtoToEventJoinId")
-    default EventJoinId mapToEventJoinId(EventJoinDTO dto) {
+    default EventJoinId mapToEventJoinId(EventJoinDto dto) {
         if (dto == null) {
             return null;
         }

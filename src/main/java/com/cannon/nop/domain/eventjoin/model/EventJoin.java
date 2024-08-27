@@ -22,7 +22,7 @@ import java.util.List;
 public class EventJoin implements Serializable {
 
     private EventJoinId eventJoinId;
-    private List<EventAnswerForm> formDatas = new ArrayList<>();
+    private List<EventAnswerForm> formData = new ArrayList<>();
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime datetime;
@@ -40,9 +40,9 @@ public class EventJoin implements Serializable {
     }
     @Builder
     public EventJoin(EventJoinId eventJoinId,
-                     List<EventAnswerForm> formDatas,LocalDateTime datetime) {
+                     List<EventAnswerForm> formData,LocalDateTime datetime) {
         this.eventJoinId = eventJoinId;
-        this.formDatas.addAll(formDatas);
+        this.formData.addAll(formData);
         this.datetime = datetime != null ? datetime : LocalDateTime.now();
     }
 }
