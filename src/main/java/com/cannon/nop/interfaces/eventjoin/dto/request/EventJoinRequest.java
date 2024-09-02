@@ -10,12 +10,12 @@ import java.util.List;
 
 
 @Data
-public class EventJoinDto {
+public class EventJoinRequest {
     private String eventUrlUUID;
     @NoSpecialCharacters
     @MaxLength
     @NotBlank
     private String primaryId;
-    private List<@NotBlank @NoSpecialCharacters @MaxLength EventAnswerFormDto> formData;
+    private List<@NotBlank @NoSpecialCharacters @MaxLength EventAnswerFormRequest> formData;
 
 }

@@ -1,11 +1,33 @@
 package com.cannon.nop.application;
 
+import com.cannon.nop.domain.event.model.Event;
+import com.cannon.nop.domain.eventjoin.EventJoinRepository;
 import com.cannon.nop.domain.eventjoin.model.EventJoin;
+import com.cannon.nop.interfaces.config.exception.ApiException;
+import com.cannon.nop.interfaces.config.exception.ErrorCode;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 
-public interface EventJoinService {
-    EventJoin joinEvent(EventJoin eventJoin);
-    List<EventJoin> getJoinEvents(String eventUrlUUID);
+@RequiredArgsConstructor
+@Service
+public class EventJoinService {
+    private final EventJoinRepository eventJoinRepository;
+    private final EventService eventService;
+//    private final SseService sseService;
+
+    public EventJoin joinEvent(EventJoin eventJoin){
+        Event event = eventService.getEvent(eventJoin.getEventJoinId().getEventUrlUUID());
+        if(event.getStartDate().isAfter(eventJoin.getDatetime())) throw new ApiException(ErrorCode.NOT_EVENT_JOIN_TIME);
+        EventJoin joinedEvent = eventJoinRepository.save(eventJoin);
+//        SseEventDto sseEventDto = new SseEventDto(event.getEventUrlUUID(),joinedEvent);
+//        sseService.sendToClient(sseEventDto);
+        return joinedEvent;
+    }
+
+    public List<EventJoin> getJoinEvents(String eventUrlUUID) {
+        return eventJoinRepository.findAllByEventUrlUUID(eventUrlUUID);
+    }
 }

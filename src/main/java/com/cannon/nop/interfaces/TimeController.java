@@ -1,5 +1,6 @@
 package com.cannon.nop.interfaces;
 
+import com.cannon.nop.interfaces.config.ApiPaths;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,12 +10,11 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 @RestController
-@RequestMapping("/api/nop/v1/time")
+@RequestMapping(ApiPaths.BASE_URL)
 public class TimeController {
-    @GetMapping
+    @GetMapping("time")
     public ResponseEntity<String> getCurrentServerTime() {
         Instant nowUtc = Instant.now();
         ZonedDateTime nowKst = nowUtc.atZone(ZoneId.of("Asia/Seoul"));

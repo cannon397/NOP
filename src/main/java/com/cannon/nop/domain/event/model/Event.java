@@ -24,6 +24,7 @@ public class Event implements Serializable {
     @Setter
     @Id
     private String eventUrlUUID;
+    private String adminKeyUUID;
     private String primaryId;
     private List<EventQuestionForm> eventQuestionForms = new ArrayList<>();
     private Integer joinLimit;
@@ -44,11 +45,13 @@ public class Event implements Serializable {
     @Builder
     public Event(List<EventQuestionForm> eventQuestionForms,
                  String eventUrlUUID,
+                 String adminKeyUUID,
                  String primaryId,
                  LocalDateTime startDate,
                  Integer joinLimit) {
         this.eventQuestionForms.addAll(eventQuestionForms);
         this.eventUrlUUID = eventUrlUUID != null ? eventUrlUUID : Util.getUUID();
+        this.adminKeyUUID = adminKeyUUID != null ? adminKeyUUID: Util.getUUID();
         this.primaryId = primaryId;
         this.startDate = startDate;
         this.joinLimit = joinLimit;

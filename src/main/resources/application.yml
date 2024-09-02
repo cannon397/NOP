@@ -3,6 +3,15 @@ spring:
     name: NOP
   profiles:
     active: redis
+  web:
+    resources:
+      add-mappings: false
 server:
   port: 80
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    com.cannon.nop: DEBUG
+
 

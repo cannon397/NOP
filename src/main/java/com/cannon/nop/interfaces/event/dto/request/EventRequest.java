@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class EventRequestDto
+public class EventRequest
 {
 
 
@@ -19,7 +19,7 @@ public class EventRequestDto
     @MaxLength
     @NotBlank
     private String primaryId;
-    private List<@NotBlank @NoSpecialCharacters @MaxLength EventQuestionFormDto> formData;
+    private List<@NotBlank @NoSpecialCharacters @MaxLength EventQuestionFormRequest> formData;
     @NotBlank
     @MaxLength
 //    0이면 안된다는 로직 필요함
