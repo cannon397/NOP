@@ -11,6 +11,7 @@ public record EventResponse(
         @JsonView(Views.WhenEventJoin.class) String primaryId,
         @JsonView(Views.WhenEventJoin.class) List<EventQuestionFormResponse> formData,
         @JsonView(Views.WhenEventJoin.class) LocalDateTime startDate,
-        @JsonView(Views.WhenGetEventResult.class) Integer joinLimit
+        @JsonView(Views.WhenGetEventResult.class) Integer joinLimit,
+        @JsonView(Views.WhenGetEventResult.class) Integer joinLeft
 ) {
 }

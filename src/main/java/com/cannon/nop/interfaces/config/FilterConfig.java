@@ -11,7 +11,7 @@ public class FilterConfig {
     @Bean
     public FilterRegistrationBean<JwtAuthenticationFilter> jwtFilterRegistration(JwtAuthenticationFilter filter) {
         FilterRegistrationBean<JwtAuthenticationFilter> registration = new FilterRegistrationBean<>(filter);
-        registration.addUrlPatterns(ApiPaths.BASE_URL+"/organizer/*");  // 보호할 URL 패턴 지정
+        registration.addUrlPatterns(ApiPaths.BASE_URL+"/organizer/*/*");  // 보호할 URL 패턴 지정
         registration.setOrder(1);
         return registration;
     }
