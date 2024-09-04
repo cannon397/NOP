@@ -64,8 +64,8 @@ class RedisEventRepositoryTest {
 
 //      이벤트 결과 값 검증
         EventResult eventResult = EventResult.builder()
-                .event(eventRepository.findById(aEventAccessManagement().build().getEventUrlUUID()).orElseThrow(IllegalArgumentException::new))
-                .eventJoins(eventJoinRepository.findAllByEventUrlUUID(aEventAccessManagement().build().getEventUrlUUID()))
+                .event(eventRepository.findById(event.getEventUrlUUID()).orElseThrow(IllegalArgumentException::new))
+                .eventJoins(eventJoinRepository.findAllByEventUrlUUID(event.getEventUrlUUID()))
                 .build();
         assertThat(eventResult).isNotNull();
 

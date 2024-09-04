@@ -39,8 +39,8 @@ public class RaceConditionTest {
 
     @AfterEach
     void tearDown() {
-//        eventJoinRepository.delete(aEvent().build().getEventUrlUUID());
-//        eventRepository.delete(aEvent().build());
+        eventJoinRepository.delete(aEvent().build().getEventUrlUUID());
+        eventRepository.delete(aEvent().build());
     }
     @BeforeEach
     void setUp() {
@@ -76,7 +76,7 @@ public class RaceConditionTest {
 
         for (Future<EventJoin> future : futures) {
             try {
-                EventJoin eventJoin = future.get();
+                future.get();
             } catch (ExecutionException e) {
                 log.info(e.getMessage());
                 exceptionCount.incrementAndGet();

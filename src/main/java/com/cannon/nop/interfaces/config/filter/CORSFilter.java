@@ -9,6 +9,7 @@ import java.io.IOException;
 
 @Component
 public class CORSFilter implements Filter {
+    private final String LOCAL_HOST = "http://localhost:5173";
     private final String allowedOrigins = "https://nop-svelte.vercel.app";
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {

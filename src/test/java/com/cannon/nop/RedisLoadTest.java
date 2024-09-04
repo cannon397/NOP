@@ -4,9 +4,7 @@ import com.cannon.nop.domain.event.EventRepository;
 import com.cannon.nop.domain.event.model.Event;
 import com.cannon.nop.domain.eventjoin.EventJoinRepository;
 import com.cannon.nop.domain.eventjoin.model.EventJoin;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,15 +33,15 @@ public class RedisLoadTest {
     void setUp() {
         event = eventRepository.save(aEvent().build());
     }
-//    @AfterEach
-//    void tearDown() {
-//        eventRepository.delete(event);
-//        eventJoinRepository.delete(event.getEventUrlUUID());
-//    }
+    @AfterEach
+    void tearDown() {
+        eventRepository.delete(event);
+        eventJoinRepository.delete(event.getEventUrlUUID());
+    }
 
     @Test
     @DisplayName("레디스 성능테스트")
-//    @Disabled
+    @Disabled
     void test(){
 
         ExecutorService executor = Executors.newFixedThreadPool(200);

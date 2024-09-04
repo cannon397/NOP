@@ -6,8 +6,6 @@ import com.cannon.nop.domain.event.model.EventQuestionForm;
 import com.cannon.nop.domain.event.model.EventQuestionForm.EventQuestionFormBuilder;
 import com.cannon.nop.domain.event.model.EventResult;
 import com.cannon.nop.domain.event.model.EventResult.EventResultBuilder;
-import com.cannon.nop.domain.eventauth.model.EventAuth;
-import com.cannon.nop.domain.eventauth.model.EventAuth.EventAuthBuilder;
 import com.cannon.nop.domain.eventjoin.model.EventAnswerForm;
 import com.cannon.nop.domain.eventjoin.model.EventAnswerForm.EventAnswerFormBuilder;
 import com.cannon.nop.domain.eventjoin.model.EventJoin;
@@ -26,15 +24,10 @@ public class Fixtures {
                 .primaryId("질문지_기본키")
                 .startDate(LocalDateTime.now())
                 .joinLimit(20)
+                .joinLeft(20)
                 .eventQuestionForms(Arrays.asList(
                         aEventQuestionForm().build()
                 ));
-    }
-    public static EventAuthBuilder aEventAccessManagement(){
-        return EventAuth.builder()
-                .adminUrlUUID("test_adminUrlUUID")
-                .adminKeyUUID("test_adminKeyUUID")
-                .eventUrlUUID(aEvent().build().getEventUrlUUID());
     }
     public static EventQuestionFormBuilder aEventQuestionForm(){
         return EventQuestionForm.builder()
