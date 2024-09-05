@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.test.context.ActiveProfiles;
 
 import static com.cannon.nop.Fixtures.aEvent;
 import static com.cannon.nop.Fixtures.aEventJoin;
@@ -24,6 +25,7 @@ import static org.mockito.Mockito.when;
 @Slf4j
 @DisplayName("유저이벤트서비스 테스트")
 @ExtendWith(MockitoExtension.class)
+@ActiveProfiles("test")
 class EventJoinServiceTest {
 
 

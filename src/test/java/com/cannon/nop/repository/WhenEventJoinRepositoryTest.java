@@ -1,5 +1,6 @@
 package com.cannon.nop.repository;
 
+import com.cannon.nop.TestRedisConfiguration;
 import com.cannon.nop.domain.event.EventRepository;
 import com.cannon.nop.domain.event.model.Event;
 import com.cannon.nop.domain.eventjoin.EventJoinRepository;
@@ -7,6 +8,8 @@ import com.cannon.nop.domain.eventjoin.model.EventJoin;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 
 
 import static com.cannon.nop.Fixtures.*;
@@ -14,8 +17,10 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
 
+@Import(TestRedisConfiguration.class)
 @DisplayName("이벤트 참가자 CRUD 테스트")
 @SpringBootTest
+@ActiveProfiles("test")
 class EventJoinRepositoryTest {
     @Autowired
     private EventRepository eventRepository;

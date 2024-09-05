@@ -6,6 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -39,7 +40,7 @@ public class RedisConfig {
 
     @Value("${spring.data.redis.password}")
     private String redisPassword;
-
+    @Profile("!test")
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
 
