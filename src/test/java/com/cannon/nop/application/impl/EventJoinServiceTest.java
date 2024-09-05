@@ -16,6 +16,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDateTime;
+
 import static com.cannon.nop.Fixtures.aEvent;
 import static com.cannon.nop.Fixtures.aEventJoin;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -41,8 +43,9 @@ class EventJoinServiceTest {
     private Event expectedEvent;
     @BeforeEach
     void initAll(){
+        LocalDateTime fixedTime = LocalDateTime.of(2024, 9, 4, 12, 0);  // 고정된 시간 설정
         eventJoin = aEventJoin().build();
-        expectedEvent = aEvent().build();
+        expectedEvent = aEvent().startDate(fixedTime).build();
     }
 
     @Test
