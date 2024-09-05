@@ -11,6 +11,12 @@ jobs:
       contents: read
       attestations: write
       id-token: write
+    env:
+          OCI_CLI_USER: ${{ secrets.OCI_CLI_USER }}
+          OCI_CLI_TENANCY: ${{ secrets.OCI_CLI_TENANCY }}
+          OCI_CLI_FINGERPRINT: ${{ secrets.OCI_CLI_FINGERPRINT }}
+          OCI_CLI_KEY_CONTENT: ${{ secrets.OCI_CLI_KEY_CONTENT }}
+          OCI_CLI_REGION: ${{ secrets.OCI_CLI_REGION }}      
     steps:
       - name: Check Out the Repo
         uses: actions/checkout@v4
@@ -25,7 +31,7 @@ jobs:
           echo "spring:" > ./src/main/resources/application-redis.yml
           echo "  data:" >> ./src/main/resources/application-redis.yml
           echo "  redis:" >> ./src/main/resources/application-redis.yml
-          echo "    host: cannon397.duckdns.org" >> ./src/main/resources/application-redis.yml
+          echo "    host: redis-nop-container" >> ./src/main/resources/application-redis.yml
           echo "    port: ${{ secrets.REDIS_PORT }}" >> ./src/main/resources/application-redis.yml
           echo "    password: ${{ secrets.REDIS_PASSWORD }}" >> ./src/main/resources/application-redis.yml
 
@@ -57,4 +63,70 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: user/app:latest
+          platforms: linux/arm64
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/nop:latest
+        
+      - name: Get Github Public IP
+        id: ip
+        uses: haythem/public-ip@v1.3
+
+      - name: Print public Ip
+        run: |
+          echo "Public IPv4: ${{ steps.ip.outputs.ipv4 }}"        
+
+      - name: Install OCI CLI
+        run: |
+          curl -L https://raw.githubusercontent.com/oracle/oci-cli/master/scripts/install/install.sh | bash -s -- --accept-all-defaults --install-dir ~/lib/oci-cli
+          export PATH=~/lib/oci-cli/bin:$PATH
+          echo $PATH
+        shell: bash
+
+      - name: Configure OCI CLI
+        run: |
+          mkdir -p ~/.oci
+          echo "${{ secrets.OCI_CLI_KEY_CONTENT }}" > ~/.oci/oci_api_key.pem
+          echo "[DEFAULT]
+          user=${{ secrets.OCI_CLI_USER }}
+          fingerprint=${{ secrets.OCI_CLI_FINGERPRINT }}
+          tenancy=${{ secrets.OCI_CLI_TENANCY }}
+          region=${{ secrets.OCI_CLI_REGION }}
+          key_file=~/.oci/oci_api_key.pem" > ~/.oci/config
+
+      - name: Get existing security list rules
+        run: |
+          ~/lib/oci-cli/bin/oci network security-list get --security-list-id ${{ secrets.OCI_CLI_SECURITYLIST_ID }} --query 'data."ingress-security-rules"' --output json > existing-rules.json
+
+
+      - name: Modify ingress rules
+        run: |
+          IP_ADDRESS="${{ steps.ip.outputs.ipv4 }}"
+          NEW_RULE='{"protocol": "6", "source": "'$IP_ADDRESS'/32", "isStateless": false, "tcpOptions": {"destinationPortRange": {"min": 22, "max": 22}}}'
+          jq --argjson newRule "$NEW_RULE" '. += [$newRule]' existing-rules.json > merged-ingress-rules.json
+
+
+      - name: Update Security List
+        run: |
+          ~/lib/oci-cli/bin/oci network security-list update \
+            --security-list-id ${{ secrets.OCI_CLI_SECURITYLIST_ID }} \
+            --ingress-security-rules file://$(pwd)/merged-ingress-rules.json \
+            --force
+          
+      - name: Execute command via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_DOMAIN }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/nop:latest
+            docker image tag ${{ secrets.DOCKERHUB_USERNAME }}/nop:latest backend-nop:test
+            docker run -d --name backend-nop --network oracle backend-nop:test
+            
+      - name: Rollback Security List
+        if: always()
+        run: |
+          ~/lib/oci-cli/bin/oci network security-list update \
+            --security-list-id ${{ secrets.OCI_CLI_SECURITYLIST_ID }} \
+            --ingress-security-rules file://$(pwd)/existing-rules.json \
+            --force
