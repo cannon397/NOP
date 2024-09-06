@@ -28,12 +28,12 @@ jobs:
 
       - name: Create Properties File
         run: |
-          echo "spring:" > ./src/main/resources/application-redis.yml
-          echo "  data:" >> ./src/main/resources/application-redis.yml
-          echo "  redis:" >> ./src/main/resources/application-redis.yml
-          echo "    host: redis-nop-container" >> ./src/main/resources/application-redis.yml
-          echo "    port: ${{ secrets.REDIS_PORT }}" >> ./src/main/resources/application-redis.yml
-          echo "    password: ${{ secrets.REDIS_PASSWORD }}" >> ./src/main/resources/application-redis.yml
+          echo "spring:" > ./src/main/resources/application-redis.yaml
+          echo "  data:" >> ./src/main/resources/application-redis.yaml
+          echo "    redis:" >> ./src/main/resources/application-redis.yaml
+          echo "      host: redis-nop-container" >> ./src/main/resources/application-redis.yaml
+          echo "      port: ${{ secrets.REDIS_PORT }}" >> ./src/main/resources/application-redis.yaml
+          echo "      password: ${{ secrets.REDIS_PASSWORD }}" >> ./src/main/resources/application-redis.yaml
 
       - name: Setup Java
         uses: actions/setup-java@v4
@@ -109,7 +109,7 @@ jobs:
           ~/lib/oci-cli/bin/oci network security-list update \
             --security-list-id ${{ secrets.OCI_CLI_SECURITYLIST_ID }} \
             --ingress-security-rules file://$(pwd)/merged-ingress-rules.json \
-            --force
+            --force > /dev/null
           
       - name: Execute command via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -129,4 +129,4 @@ jobs:
           ~/lib/oci-cli/bin/oci network security-list update \
             --security-list-id ${{ secrets.OCI_CLI_SECURITYLIST_ID }} \
             --ingress-security-rules file://$(pwd)/existing-rules.json \
-            --force
+            --force > /dev/null
