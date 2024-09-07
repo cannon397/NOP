@@ -1,10 +1,11 @@
+name: 워크플로우 테스트
 on: workflow_dispatch
 #  push:
 #    branches:
 #    - test/deploy
 jobs:    
   push_to_registry:
-    name: Push Docker Image to Dokcer Hub
+    name: Push Docker Image to Dokcer Hub, Get OCI Securitylist, SSH Deploy, Update Rollback Securitylist
     runs-on: ubuntu-latest
     permissions:
       packages: write
