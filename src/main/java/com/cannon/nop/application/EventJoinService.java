@@ -16,14 +16,12 @@ import java.util.List;
 public class EventJoinService {
     private final EventJoinRepository eventJoinRepository;
     private final EventService eventService;
-//    private final SseService sseService;
+
 
     public EventJoin joinEvent(EventJoin eventJoin){
         Event event = eventService.getEvent(eventJoin.getEventJoinId().getEventUrlUUID());
         if(event.getStartDate().isAfter(eventJoin.getDatetime())) throw new ApiException(ErrorCode.NOT_EVENT_JOIN_TIME);
         EventJoin joinedEvent = eventJoinRepository.save(eventJoin);
-//        SseEventDto sseEventDto = new SseEventDto(event.getEventUrlUUID(),joinedEvent);
-//        sseService.sendToClient(sseEventDto);
         return joinedEvent;
     }
 

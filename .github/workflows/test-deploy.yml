@@ -3,8 +3,8 @@ on: workflow_dispatch
 #    branches:
 #    - test/deploy
 jobs:    
-  push_to_registry:
-    name: 자동배포포
+  CI-CD:
+    name: 자동배포
     runs-on: ubuntu-latest
     permissions:
       packages: write

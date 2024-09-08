@@ -17,7 +17,6 @@ public class EventResultService{
     private final EventJoinService eventJoinService;
 
     public EventResult getEventResult(String eventUrlUUID){
-//        EventAdmin eventAdmin = eventAdminService.getEventAccessManagement(adminUrlUUID);
         Event event = eventService.getEvent(eventUrlUUID);
         List<EventJoin> eventJoins = eventJoinService.getJoinEvents(eventUrlUUID);
 

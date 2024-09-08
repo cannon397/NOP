@@ -15,7 +15,6 @@ public class EventService {
 
 
     public Event createEvent(Event event){
-//        eventAdminService.createEventAdmin(event);
         return eventRepository.save(event);
     }
 
