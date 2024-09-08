@@ -50,21 +50,25 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Move Jar to /nop_deploy
+        run: mv build/libs/NOP.jar nop_deploy/
+
+# 도커허브를 이용하여 CI/CD 구성이 복잡하다 판단하여 제거
+#      - name: Log in to Docker Hub
+#        uses: docker/login-action@v3
+#        with:
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_TOKEN }}
   
-      - name: Build and push Docker image
-        id: push
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          platforms: linux/arm64
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/nop:latest
+#      - name: Build and push Docker image
+#        id: push
+#        uses: docker/build-push-action@v6
+#        with:
+#          context: .
+#          file: ./Dockerfile
+#          push: true
+#          platforms: linux/arm64
+#          tags: ${{ secrets.DOCKERHUB_USERNAME }}/nop:latest
         
       - name: Get Github Public IP
         id: ip
@@ -110,6 +114,15 @@ jobs:
             --security-list-id ${{ secrets.OCI_CLI_SECURITYLIST_ID }} \
             --ingress-security-rules file://$(pwd)/merged-ingress-rules.json \
             --force > /dev/null
+
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_DOMAIN }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: nop_deploy/
+          target: ~/docker/
           
       - name: Execute command via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -117,11 +130,15 @@ jobs:
           host: ${{ secrets.SERVER_DOMAIN }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          timeout: 120
           script: |
-            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/nop:latest
-            docker image tag ${{ secrets.DOCKERHUB_USERNAME }}/nop:latest backend-nop:test
-            docker run -d --name backend-nop --network oracle backend-nop:test
+            cd docker/nop_deploy
+            chmod +x deploy.sh && sh deploy.sh
+#          |
+#            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+#            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/nop:latest
+#            docker image tag ${{ secrets.DOCKERHUB_USERNAME }}/nop:latest backend-nop:test
+#            docker run -d --name backend-nop --network oracle backend-nop:test
             
       - name: Rollback Security List
         if: always()

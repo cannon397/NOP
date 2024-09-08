@@ -1,0 +1,24 @@
+services:
+  blue:
+    container_name: nop-backend-container-blue
+    environment:
+      - TZ=Asia/Seoul
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: nop-backend:blue
+    networks:
+      - oracle
+  green:
+    container_name: nop-backend-container-green
+    environment:
+      - TZ=Asia/Seoul
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    image: nop-backend:green
+    networks:
+      - oracle
+networks:
+  oracle:
+    external: true
