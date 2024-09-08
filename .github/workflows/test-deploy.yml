@@ -1,10 +1,11 @@
+name: 블루 그린 수동배포
 on: workflow_dispatch
 #  push:
 #    branches:
 #    - test/deploy
 jobs:    
   CI-CD:
-    name: 자동배포
+    name: 빌드 > OCI 인바운드 추가 > SCP 파일복사 > SSH Deploy.sh 실행 > OCI 인바운드 제거
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -121,6 +122,7 @@ jobs:
           host: ${{ secrets.SERVER_DOMAIN }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          timeout: 120s #간헐적으로 i/o timeout이 발생
           source: "nop_deploy/"
           target: "~/docker/"
           

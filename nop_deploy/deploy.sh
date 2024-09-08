@@ -17,7 +17,7 @@ deploy_and_reload() {
     echo "$new_version version started successfully."
     sleep 60  # 성공 시 1분 대기
     # Nginx 설정 파일을 수정하고 리로드
-    if docker cp ~/docker/nop/${new_version}.conf nginx-container:/etc/nginx/conf.d/nop.conf; then
+    if docker cp ~/docker/nop_deploy/${new_version}.conf nginx-container:/etc/nginx/conf.d/nop.conf; then
       docker exec nginx-container nginx -s reload
       docker compose down $old_version
       echo ""
