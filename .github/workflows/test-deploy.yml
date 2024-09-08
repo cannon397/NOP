@@ -4,7 +4,7 @@ on: workflow_dispatch
 #    - test/deploy
 jobs:    
   push_to_registry:
-    name: Push Docker Image to Dokcer Hub
+    name: 자동배포포
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -131,6 +131,7 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           timeout: 120
+          debug: true
           script: |
             cd docker/nop_deploy
             chmod +x deploy.sh && sh deploy.sh
