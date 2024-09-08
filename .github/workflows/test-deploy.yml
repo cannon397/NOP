@@ -121,8 +121,8 @@ jobs:
           host: ${{ secrets.SERVER_DOMAIN }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: nop_deploy/
-          target: ~/docker/
+          source: "nop_deploy/"
+          target: "~/docker/"
           
       - name: Execute command via SSH
         uses: appleboy/ssh-action@v1.0.3
@@ -130,7 +130,7 @@ jobs:
           host: ${{ secrets.SERVER_DOMAIN }}
           username: ${{ secrets.SERVER_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          timeout: 120
+          timeout: 120s #쉘스크립트 실행시 블루 그린 배포간에 1분 대기하여 설정
           debug: true
           script: |
             cd docker/nop_deploy
