@@ -1,9 +1,13 @@
-name: 블루 그린 수동배포
-on: workflow_dispatch
-#  push:
-#    branches:
-#    - test/deploy
-jobs:    
+name: 블루 그린 자동 및 수동 배포
+on:
+  push:
+    branches:
+    - main
+    paths-ignore:
+      - 'README.md'
+  workflow_dispatch:
+
+jobs:
   CI-CD:
     name: 빌드 > OCI 인바운드 추가 > SCP 파일복사 > SSH Deploy.sh 실행 > OCI 인바운드 제거
     runs-on: ubuntu-latest

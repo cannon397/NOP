@@ -8,6 +8,11 @@ spring:
       add-mappings: false
 server:
   port: 80
+  servlet:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
 logging:
   level:
     root: INFO
