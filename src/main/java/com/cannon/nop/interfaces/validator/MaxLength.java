@@ -5,16 +5,23 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.Payload;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-@Documented
+import static java.lang.annotation.ElementType.FIELD;
+
+
 @Constraint(validatedBy = MaxLength.MaxLengthValidator.class)
-@Target({ElementType.TYPE_USE, ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE })
+@Target(FIELD)
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MaxLength {
     String message() default "문자열의 길이는 50자를 초과할 수 없습니다.";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
+
     class MaxLengthValidator implements ConstraintValidator<MaxLength, String> {
         private static final int MAX_LENGTH = 50;
 

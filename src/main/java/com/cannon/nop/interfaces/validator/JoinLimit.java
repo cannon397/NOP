@@ -1,6 +1,5 @@
 package com.cannon.nop.interfaces.validator;
 
-
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -13,25 +12,25 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 
-@Constraint(validatedBy = NotBlank.NoBlankValidator.class)
+@Constraint(validatedBy = JoinLimit.JoinLimitValidator.class)
 @Target(FIELD)
 @Retention(RUNTIME)
-public @interface NotBlank {
-    String message() default "필수 또는 질문 입력란은 비어있을 수 없습니다.";
+public @interface JoinLimit {
+    String message() default "참가인원은 최소 1이상 50이하 까지 가능합니다.";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 
-    class NoBlankValidator implements ConstraintValidator<NotBlank, String> {
-
+    class JoinLimitValidator implements ConstraintValidator<JoinLimit, Integer> {
         @Override
-        public void initialize(NotBlank constraintAnnotation) {
+        public void initialize(JoinLimit constraintAnnotation) {
         }
 
         @Override
-        public boolean isValid(String value, ConstraintValidatorContext context) {
-            return !value.isEmpty();
+        public boolean isValid(Integer joinLimit, ConstraintValidatorContext context) {
+
+            return joinLimit > 0 && joinLimit <= 50;
         }
     }
 }

@@ -16,6 +16,6 @@ public class EventJoinRequest {
     @MaxLength
     @NotBlank
     private String primaryId;
-    private List<@NotBlank @NoSpecialCharacters @MaxLength EventAnswerFormRequest> formData;
+    private List<EventAnswerFormRequest> formData;
 
 }

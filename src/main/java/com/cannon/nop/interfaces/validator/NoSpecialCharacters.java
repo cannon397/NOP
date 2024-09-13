@@ -5,16 +5,23 @@ import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import jakarta.validation.Payload;
 
-import java.lang.annotation.*;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 
-@Documented
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+
 @Constraint(validatedBy = NoSpecialCharacters.SpecialCharacterValidator.class)
-@Target({ElementType.TYPE_USE, ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE })
-@Retention(RetentionPolicy.RUNTIME)
+@Target(FIELD)
+@Retention(RUNTIME)
 public @interface NoSpecialCharacters {
     String message() default "특수문자가 포함되어 있습니다.";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
+
     class SpecialCharacterValidator implements ConstraintValidator<NoSpecialCharacters, String> {
         private static final String SPECIAL_CHARACTERS = "[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]+";
 

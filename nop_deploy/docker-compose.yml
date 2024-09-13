@@ -7,6 +7,8 @@ services:
       context: .
       dockerfile: Dockerfile
     image: nop-backend:blue
+    volumes:
+      - error_log:/app/logs/
     networks:
       - oracle
   green:
@@ -17,8 +19,12 @@ services:
       context: .
       dockerfile: Dockerfile
     image: nop-backend:green
+    volumes:
+      - error_log:/app/logs/
     networks:
       - oracle
 networks:
   oracle:
     external: true
+volumes:
+  error_log:

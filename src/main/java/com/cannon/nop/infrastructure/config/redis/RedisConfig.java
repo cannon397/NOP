@@ -3,6 +3,8 @@ package com.cannon.nop.infrastructure.config.redis;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,12 +29,12 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.scripting.support.ResourceScriptSource;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@Profile("redis")
 @Configuration
 @EnableRedisRepositories(enableKeyspaceEvents = RedisKeyValueAdapter.EnableKeyspaceEvents.ON_STARTUP)
 @EnableTransactionManagement
 public class RedisConfig {
 
+    private static final Logger log = LoggerFactory.getLogger(RedisConfig.class);
     @Value("${spring.data.redis.host}")
     private String redisHost;
 
@@ -41,10 +43,10 @@ public class RedisConfig {
 
     @Value("${spring.data.redis.password}")
     private String redisPassword;
-
+    @Profile("!test")
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-
+        log.info("Prod Redis Server Create...");
         RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration(redisHost, redisPort);
         redisConfig.setPassword(RedisPassword.of(redisPassword));
         return new LettuceConnectionFactory(redisConfig);
@@ -65,6 +67,7 @@ public class RedisConfig {
         template.setEnableTransactionSupport(true);
         return template;
     }
+
     @Bean
     public RedisScript<Object> script() {
         DefaultRedisScript<Object> redisScript = new DefaultRedisScript<>();

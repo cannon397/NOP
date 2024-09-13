@@ -73,7 +73,7 @@ public class RedisEventJoinRepositoryImpl implements EventJoinRepository {
                 throw new ApiException(errorCode);
             }
         } else {
-            throw new ApiException(ErrorCode.INTERNAL_ERROR,"Unexpected result type from Lua script.");
+            throw new ApiException(ErrorCode.INTERNAL_ERROR).setDeveloperMessage("Unexpected result type from Lua script.");
         }
     }
 
@@ -91,7 +91,7 @@ public class RedisEventJoinRepositoryImpl implements EventJoinRepository {
                 EventJoin eventJoinObj = objectMapper.readValue(jsonStr, EventJoin.class);
                 eventJoins.add(eventJoinObj);
             } catch (JsonProcessingException e) {
-                throw new ApiException(ErrorCode.INTERNAL_ERROR,e.getMessage());
+                throw new ApiException(ErrorCode.INTERNAL_ERROR).setDeveloperMessage(e.getMessage());
             }
         }
 

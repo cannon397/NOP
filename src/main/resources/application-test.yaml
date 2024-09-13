@@ -4,3 +4,5 @@ spring:
       host: localhost
       port: 6370
       password:
+jwt:
+  secret-key: DCuWefoPNhd0rHOAuTtaqJlkUIqjW5W9

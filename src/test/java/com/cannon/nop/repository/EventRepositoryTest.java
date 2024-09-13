@@ -21,7 +21,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 @DisplayName("이벤트 주최자 CRUD 테스트")
 @SpringBootTest
 @ActiveProfiles("test")
-class RedisEventRepositoryTest {
+class EventRepositoryTest {
 
 
     @Autowired

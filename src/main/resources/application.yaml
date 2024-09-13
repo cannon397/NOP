@@ -2,7 +2,7 @@ spring:
   application:
     name: NOP
   profiles:
-    active: redis
+    active: prod
   web:
     resources:
       add-mappings: false
@@ -13,10 +13,7 @@ server:
       enabled: true
       charset: UTF-8
       force: true
-logging:
-  level:
-    root: INFO
-    org.springframework.web: DEBUG
-    com.cannon.nop: DEBUG
+    context-path: /api/nop/v1
+
 
 

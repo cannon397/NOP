@@ -8,14 +8,20 @@ import jakarta.validation.Payload;
 import java.lang.annotation.*;
 import java.time.LocalDateTime;
 
-@Documented
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+
 @Constraint(validatedBy = FutureOrNow.FutureOrNowValidator.class)
-@Target({ ElementType.METHOD, ElementType.FIELD, ElementType.ANNOTATION_TYPE })
-@Retention(RetentionPolicy.RUNTIME)
+@Target(FIELD)
+@Retention(RUNTIME)
 public @interface FutureOrNow {
     String message() default "이벤트 생성 시간이 현재보다 과거입니다.";
+
     Class<?>[] groups() default {};
+
     Class<? extends Payload>[] payload() default {};
+
     class FutureOrNowValidator implements ConstraintValidator<FutureOrNow, LocalDateTime> {
         @Override
         public void initialize(FutureOrNow constraintAnnotation) {

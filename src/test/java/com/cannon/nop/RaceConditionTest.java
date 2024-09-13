@@ -4,12 +4,11 @@ import com.cannon.nop.application.EventJoinService;
 import com.cannon.nop.domain.event.EventRepository;
 import com.cannon.nop.domain.eventjoin.EventJoinRepository;
 import com.cannon.nop.domain.eventjoin.model.EventJoin;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
@@ -28,9 +27,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ActiveProfiles("test")
 @Import(TestRedisConfiguration.class)
+@Slf4j
 public class RaceConditionTest {
 
-    private static final Logger log = LoggerFactory.getLogger(RaceConditionTest.class);
+
     @Autowired
     private EventJoinService eventJoinService;
 
@@ -39,6 +39,7 @@ public class RaceConditionTest {
 
     @Autowired
     private EventRepository eventRepository;
+
 
     @AfterEach
     void tearDown() {
