@@ -26,9 +26,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+
         try {
             String requestURL = request.getRequestURI();
             String[] parts = requestURL.split("/");
+            if(requestURL.equals("/api/nop/v1/organizer") || requestURL.equals("/api/nop/v1/organizer/")){
+                filterChain.doFilter(request, response);
+                return;
+            }
             if (parts.length >= 6 && parts[5].length() == 36) {
                 String urlUUID = parts[5];
                 final String authHeader = request.getHeader("Authorization");
