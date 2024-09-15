@@ -12,7 +12,7 @@ import java.util.List;
 public class EventRequest
 {
 
-    @NoSpecialCharacters
+
     @MaxLength
     @NotBlank
     private String primaryId;

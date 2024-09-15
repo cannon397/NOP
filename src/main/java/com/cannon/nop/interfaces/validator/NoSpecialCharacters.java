@@ -7,6 +7,8 @@ import jakarta.validation.Payload;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
@@ -23,7 +25,8 @@ public @interface NoSpecialCharacters {
     Class<? extends Payload>[] payload() default {};
 
     class SpecialCharacterValidator implements ConstraintValidator<NoSpecialCharacters, String> {
-        private static final String SPECIAL_CHARACTERS = "[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]+";
+        // 영문자와 숫자를 제외한 특수문자를 찾는 패턴
+        private static final String SPECIAL_CHARACTERS = "[^a-zA-Z0-9]";
 
         @Override
         public void initialize(NoSpecialCharacters constraintAnnotation) {
@@ -31,8 +34,10 @@ public @interface NoSpecialCharacters {
 
         @Override
         public boolean isValid(String value, ConstraintValidatorContext context) {
-            if (value == null) return true; // null check is not the responsibility here
-            return !value.matches(SPECIAL_CHARACTERS);
+            if (value == null) return true; // null 값은 유효성 검사의 대상이 아님
+            Pattern pattern = Pattern.compile(SPECIAL_CHARACTERS);
+            Matcher matcher = pattern.matcher(value);
+            return !matcher.find(); // 특수문자가 포함되지 않았을 경우 true 반환
         }
     }
 }
