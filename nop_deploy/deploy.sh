@@ -20,6 +20,7 @@ deploy_and_reload() {
     if docker cp ~/docker/nop_deploy/${new_version}.conf nginx-container:/etc/nginx/conf.d/nop.conf; then
       docker exec nginx-container nginx -s reload
       docker compose down $old_version
+      docker image prune -f
       echo ""
     else
       echo "Failed to update Nginx configuration on $new_version."
