@@ -3,6 +3,7 @@ package com.cannon.nop;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -16,10 +17,15 @@ import java.io.IOException;
 public class TestRedisConfiguration {
 
     private final RedisServer redisServer;
+    private String redisHost;
+    private int redisPort;
 
-    public TestRedisConfiguration() throws IOException {
+    public TestRedisConfiguration(@Value("${spring.data.redis.host}")String redisHost,@Value("${spring.data.redis.port}")int redisPort) throws IOException {
         log.info("what is Redis Server Starting...");
-        this.redisServer = new RedisServer(6370);
+        log.info("what is Redis Server Starting...{},{}",redisHost,redisPort);
+        this.redisHost = redisHost;
+        this.redisPort = redisPort;
+        this.redisServer = new RedisServer(redisPort);
     }
 
     @PostConstruct
@@ -31,7 +37,7 @@ public class TestRedisConfiguration {
     public RedisConnectionFactory redisConnectionFactory() {
         // 테스트용 임베디드 Redis 서버에 연결하는 Factory 반환
         log.info("Client Connect to Embedded RedisServer...");
-        return new LettuceConnectionFactory("localhost", 6370);
+        return new LettuceConnectionFactory(redisHost, redisPort);
     }
 
     @PreDestroy
