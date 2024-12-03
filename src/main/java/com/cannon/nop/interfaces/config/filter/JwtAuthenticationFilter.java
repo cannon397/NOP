@@ -2,7 +2,9 @@ package com.cannon.nop.interfaces.config.filter;
 
 import com.cannon.nop.interfaces.auth.JwtProvider;
 import com.cannon.nop.interfaces.config.exception.ApiException;
-import com.cannon.nop.interfaces.config.exception.ErrorCode;
+import com.cannon.nop.interfaces.config.filter.handler.JwtAuthHandler;
+import com.cannon.nop.interfaces.config.filter.handler.JwtAuthParser;
+import com.cannon.nop.interfaces.config.filter.handler.JwtHandlerFactory;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,36 +22,29 @@ import java.io.IOException;
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
-
-
     private final HandlerExceptionResolver handlerExceptionResolver;
+    private final UriFilter uriFilter;
+    private final JwtHandlerFactory jwtHandlerFactory;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
         try {
-            String requestURL = request.getRequestURI();
-            String[] parts = requestURL.split("/");
-            if(requestURL.equals("/api/nop/v1/organizer") || requestURL.equals("/api/nop/v1/organizer/")){
+            JwtAuthParser jwtAuthParser = new JwtAuthParser();
+            jwtAuthParser.setJwtProvider(jwtProvider);
+            jwtAuthParser.setRequest(request);
+            jwtAuthParser.parse();
+
+            String requestURL = jwtAuthParser.getRequestURI();
+            if (uriFilter.isExcludedUri(requestURL)) {
                 filterChain.doFilter(request, response);
                 return;
             }
-            if (parts.length >= 6 && parts[5].length() == 36) {
-                String urlUUID = parts[5];
-                final String authHeader = request.getHeader("Authorization");
-                if (authHeader != null && authHeader.startsWith("Bearer ")) {
-                    String token = authHeader.substring(7);
-                    String tokenUUID = jwtProvider.extractEventUrlUUID(token);
 
-                    if (!jwtProvider.isTokenExpired(token) && urlUUID.equals(tokenUUID)) {
-                        filterChain.doFilter(request, response);
-                    }
-                }else{
-                    throw new ApiException(ErrorCode.AUTHORIZATION_HEADER_ERROR);
-                }
-            }else{
-                throw new ApiException(ErrorCode.NOT_FOUND_RESOURCE);
-            }
+            JwtAuthHandler jwtAuthHandler = jwtHandlerFactory.create();
+            jwtAuthHandler.handle(jwtAuthParser);
+
+            filterChain.doFilter(request, response);
         } catch (ApiException e) {
             handlerExceptionResolver.resolveException(request, response, null, e);
         }
