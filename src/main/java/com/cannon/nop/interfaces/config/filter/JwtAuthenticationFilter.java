@@ -33,9 +33,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             JwtAuthParser jwtAuthParser = new JwtAuthParser();
             jwtAuthParser.setJwtProvider(jwtProvider);
             jwtAuthParser.setRequest(request);
-            jwtAuthParser.parse();
 
-            String requestURL = jwtAuthParser.getRequestURI();
+            String requestURL = request.getRequestURI();
             if (uriFilter.isExcludedUri(requestURL)) {
                 filterChain.doFilter(request, response);
                 return;
